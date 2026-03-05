@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import get_db, init_db
 from scraper import scrape_real_estate_leads
-from voice import place_call, get_llm_response
+from voice import place_call, get_llm_response, build_opening_script
 from config import get_config, save_config
 
 app = Flask(__name__)
@@ -60,9 +60,10 @@ def scrape_new_leads():
     # Get location from request or use default
     location = request.json.get('location', 'Austin, TX')
     limit = request.json.get('limit', 30)
+        mode = request.json.get('mode', 'sussex_staffing')  # 'sussex_staffing' or 'roofing'
     
     # If missing keys, return dummy data (dummy handling is now in the scraper)
-    scraped = scrape_real_estate_leads(location=location, limit=limit)
+    scraped = scrape_real_estate_leads(location=location, limit=limit, mode=mode)
     
     with get_db() as conn:
         c = conn.cursor()
