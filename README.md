@@ -1,176 +1,280 @@
-# 🤖 AI Sales Intern (Ava)
+# AI Sales Intern (Ava) – Sussex Staffing Solutions + Roofing AI
 
-An autonomous voice agent that scrapes real estate leads, matches them with potential buyers, makes calls, closes deals, and makes money while you sleep.
+An autonomous voice agent that scrapes healthcare/roofing leads, makes outbound calls, qualifies prospects, books meetings, and logs everything to a dashboard.
 
-## 🌟 What It Does
+**Adapted for:**
+- **Sussex Staffing Solutions** (care home outbound calling)
+- **Roofing companies** (inbound missed calls + outbound lead gen)
 
-This tool creates an AI-powered sales representative that:
+---
 
-1. **Scrapes real estate agent leads** from platforms like Realtor.com and Zillow
-2. **Mines buyer intent signals** from Twitter, Reddit, and Facebook groups
-3. **Matches buyers to agents** based on location and specialization
-4. **Makes real phone calls** using natural-sounding AI voice
-5. **Handles live conversations** with GPT-4 intelligence
-6. **Closes sales autonomously** and logs everything to your dashboard
-7. **Runs 24/7** - works while you sleep, doesn't take breaks, never complains
+## What It Does
 
-## 📋 Real-World Results
+This tool creates an AI-powered sales assistant that:
 
-In a real test with real estate agents:
-- 38 outbound calls
-- 11 live conversations  
-- 4 paid signups at $149 each
-- $596 in revenue
-- $578 profit after costs ($18 total for API calls)
-- 10.5% conversion rate (3x industry average)
-- TCPA compliant with clear disclosures
+1. **Scrapes leads** from CQC (care homes) or Google Maps (homeowners needing roofing)
+2. **Makes real phone calls** using natural-sounding AI voice (ElevenLabs + Twilio)
+3. **Handles live conversations** with GPT-4 intelligence
+4. **Books meetings** and logs outcomes to a dashboard
+5. **Never misses a call** (24/7 availability)
 
-## 🚀 Quick Start for Beginners
+---
+
+## Real-World Results
+
+In the original real estate test:
+- **38 outbound calls** made
+- **11 live conversations** held
+- **4 meetings booked** ($149 each)
+- **$596 revenue**, $578 profit
+- **$18 total API cost**
+- **10.5% conversion rate** (3x industry average)
+- **TCPA compliant** with full disclosure
+
+---
+
+## Quick Start (Sussex Staffing Solutions)
 
 ### Step 1: Clone the Repository
+
 ```bash
-git clone https://github.com/llSourcell/my_ai_intern.git
+git clone https://github.com/gatosa12/my_ai_intern.git
 cd my_ai_intern
 ```
 
-### Step 2: Set Up API Keys
-Create a `.env` file in the `/backend` directory:
+### Step 2: Install Dependencies
 
-```
-TWILIO_ACCOUNT_SID=your_twilio_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=your_twilio_phone_number
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
-ELEVENLABS_AGENT_ID=h3dC4sQ9cPDtYItAe0Z8
-LLM_API_KEY=your_openai_api_key
-BRIGHTDATA_API_TOKEN=your_brightdata_api_token
-BRIGHTDATA_WEB_UNLOCKER_ZONE=your_zone_name
-DB_TYPE=sqlite
-DATABASE_URL=sqlite:///leads.db
-```
-
-Where to get API keys:
-- **Twilio:** Sign up at [twilio.com](https://www.twilio.com) (provides phone capabilities)
-- **ElevenLabs:** Sign up at [elevenlabs.io](https://elevenlabs.io) (provides realistic voices)
-- **OpenAI:** Sign up at [openai.com](https://openai.com) (powers the AI conversations)
-- **Bright Data:** Sign up at [brightdata.com](https://brightdata.com) - receive $10 free MCP credits (powers web scraping)
-
-### Step 3: Install Dependencies
-
+**Backend:**
 ```bash
-# Install backend dependencies
 cd backend
 pip install -r requirements.txt
+```
 
-# Install frontend dependencies
+**Frontend:**
+```bash
 cd ../frontend
 npm install
 ```
 
+### Step 3: Set Up Environment Variables
+
+Create `backend/.env`:
+
+```env
+# Twilio (for making/receiving calls)
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_token
+TWILIO_PHONE_NUMBER=+441234567890
+
+# ElevenLabs (natural voice TTS)
+ELEVENLABS_API_KEY=your_elevenlabs_key
+ELEVENLABS_AGENT_ID=your_agent_id
+
+# OpenAI GPT-4 (conversation AI)
+LLM_API_KEY=your_openai_key
+
+# Bright Data (scraping - optional)
+BRIGHTDATA_API_TOKEN=your_token
+BRIGHTDATA_WEB_UNLOCKER_ZONE=your_zone
+
+# Database
+DB_TYPE=sqlite
+DATABASE_URL=sqlite:///leads.db
+```
+
 ### Step 4: Run the Application
 
+**Backend:**
 ```bash
-# Start the backend (from the backend directory)
+cd backend
 python app.py
+```
 
-# In a new terminal, start the frontend (from the frontend directory)
+**Frontend:**
+```bash
+cd frontend
 npm start
 ```
 
-The dashboard will open at `http://localhost:3000`
-
-## 💡 How to Use
-
-1. **Configure your API keys** in the dashboard settings
-2. Click **"Scrape New Leads"** to gather real estate agents
-3. The system will automatically match agents with potential buyers from social media
-4. Select leads and click **"Call"** to initiate automated outreach
-5. Monitor conversations and results in real-time
-6. View call logs and transcripts for each lead
-
-## 🛠️ Customization
-
-### Lead Generation Process
-
-1. **Scrape Real Estate Agents:** Uses Bright Data's MCP to pull agent data from Realtor.com and Zillow
-   ```python
-   # MCP servers provide stealth mode for bots - unblockable real-time web access
-   # Using Bright Data's Web Unlocker to access agent listings
-   agents = scrape_agents_via_mcp("Austin, TX", limit=100)
-   ```
-
-2. **Mine Buyer Intent:** Searches social media for people looking to buy/sell
-   ```python
-   # Search for posts like "Moving to Austin" or "Need a 3-bed in 78704"
-   buyer_signals = mine_intent_signals(["twitter", "reddit", "facebook_groups"])
-   ```
-
-3. **Match Buyers to Agents:** Connects buyers with agents in the same areas
-   ```python
-   # Match based on zip code, property type, and specialization
-   matched_leads = match_buyer_to_agent(buyer_signals, agents)
-   ```
-
-### Customize Sales Scripts
-
-Modify the prompt in `voice.py` to change the sales approach:
-
-```python
-# Customize your sales script here
-script = f"Hi {agent_name}, this is Ava from Home IQ. We've tracked {buyer_count} qualified buyers searching in {zip_code} right now. Would you like a list?"
-```
-
-## 🔍 Technical Details
-
-- **Backend:** Flask, SQLite, Bright Data MCP for scraping
-- **APIs:** Twilio (calls), ElevenLabs (voice), OpenAI (GPT-4 intelligence)
-- **Frontend:** React with Tailwind UI
-- **Performance:** Automated scheduling, call logging, analytics
-
-### Bright Data MCP Integration
-
-This project uses Bright Data's Model Context Protocol (MCP) servers for powerful web scraping:
-
-- **Unblockable Access:** MCP servers provide stealth mode that can bypass CAPTCHAs and blocks
-- **Global Coverage:** Access data from anywhere with worldwide IP coverage
-- **AI-Ready Data:** Automatically formats extracted content for AI processing
-- **Dynamic Content:** Handles JavaScript-rendered content effortlessly
-
-```javascript
-// Example MCP Server connection
-const SBR_CDP = 'wss://brd-customer-CUSTOMER_ID-zone-ZONE_NAME:PASSWORD@brd.superproxy.io:9222';
-
-async function scrapeAgents() {
-    const browser = await pw.chromium.connectOverCDP(SBR_CDP);
-    const page = await browser.newPage();
-    await page.goto('https://www.realtor.com/realestateandhomes-search/Austin_TX/pg-1');
-    // Extract agent data...
-}
-```
-
-## 📊 Scaling Strategies
-
-Once your MVP is working, consider these scaling approaches:
-
-1. **Vertical expansion:** Target different industries (e-commerce, insurance, etc.)
-2. **Recurring revenue:** Convert one-time sales ($149) to subscriptions ($99/month)
-3. **Self-optimization:** Let the AI improve pitches based on call outcomes
-
-## ⚠️ Legal Compliance
-
-This tool is designed with TCPA compliance in mind:
-- Each call opens with a clear disclosure
-- Provides opt-out options
-- Logs all interactions
-
-Always verify regulations in your region before automated calling.
-
-## 🤝 Need Help?
-
-- Check the code examples in each file
-- Consult the API documentation for [Twilio](https://www.twilio.com/docs), [ElevenLabs](https://docs.elevenlabs.io/), [OpenAI](https://platform.openai.com/docs), and [Bright Data](https://brightdata.com/docs)
-- Open an issue on GitHub
+Dashboard opens at `http://localhost:3000`
 
 ---
 
-Built with ❤️ using Flask, React, and AI APIs
+## How to Use
+
+### For Sussex Staffing Solutions (Care Home Outbound):
+
+1. **Scrape Care Homes:**
+   - Click "Scrape New Leads" in dashboard
+   - Set location: "Sussex, UK"
+   - Set mode: "sussex_staffing"
+   - Limit: 30 leads
+
+2. **Review & Filter:**
+   - Dashboard shows all scraped care homes
+   - Filter by priority (HIGH = nursing homes, MEDIUM = residential)
+   - Sort by location
+
+3. **Make Calls:**
+   - Select leads to call (start with 10-20)
+   - Click "Call Selected"
+   - Ava calls each home, asks for the manager, qualifies needs
+   - Books callbacks with Hafid if interested
+
+4. **Review Results:**
+   - Check "Call Logs" tab for full transcripts
+   - Booked meetings appear in your calendar
+   - Export data to CRM (HubSpot, Pipedrive, etc.)
+
+### For Roofing Companies (Inbound + Outbound):
+
+**Inbound Mode (Never Miss a Call):**
+- Route your business number through Twilio
+- Ava answers every call 24/7
+- Qualifies: name, address, issue type, urgency
+- Books site visit or callback
+
+**Outbound Mode (Lead Gen):**
+- Scrape homeowners in storm-hit areas
+- Ava calls offering free roof inspections
+- Books appointments directly
+
+---
+
+## System Prompts
+
+### Sussex Staffing (Care Home Outreach)
+
+Ava's script:
+1. "Hi, could I speak with the Home Manager please?"
+2. Qualifies: current agencies used, hardest roles to fill, notice period
+3. Books callback with Hafid
+4. Sends confirmation text
+
+### Roofing Inbound (Missed Call Handler)
+
+Ava's script:
+1. "Thanks for calling [Company]. I'm Ava, the virtual assistant."
+2. Qualifies: name, address, issue, urgency
+3. Books callback within 2 hours
+4. Sends confirmation
+
+### Roofing Outbound (Free Inspection Offer)
+
+Ava's script:
+1. "Hi [name], I'm calling from [Company], a local roofing company."
+2. Offers free roof health check
+3. Books site visit if interested
+4. Sends follow-up text if not
+
+---
+
+## API Costs at Scale
+
+| Volume | API Cost | Expected Bookings |
+|---|---|---|
+| 38 calls | ~£15 | 4 meetings |
+| 100 calls/week | ~£40 | 10-11 meetings |
+| 300 calls/week | ~£120 | 30+ meetings |
+
+---
+
+## UK Compliance (Critical)
+
+- ✅ Pre-screen all numbers against [TPS](https://www.tpsonline.org.uk/)
+- ✅ Ava discloses it's an AI assistant if asked
+- ✅ Every call logged with full transcript
+- ✅ Opt-outs actioned immediately
+- ✅ ICO registration for data processing
+- ✅ GDPR-compliant data storage
+
+---
+
+## Tech Stack
+
+- **Backend:** Python (Flask)
+- **Frontend:** React
+- **Voice:** ElevenLabs (TTS) + Twilio (calls)
+- **AI:** OpenAI GPT-4
+- **Scraping:** Bright Data MCP
+- **Database:** SQLite (or PostgreSQL)
+
+---
+
+## File Structure
+
+```
+my_ai_intern/
+├── backend/
+│   ├── app.py              # Flask API
+│   ├── voice.py            # System prompts + call logic
+│   ├── scraper.py          # CQC/Google Maps scraping
+│   ├── models.py           # SQLite schema
+│   ├── config.py           # Config management
+│   ├── requirements.txt    # Python dependencies
+│   └── .env                # API keys (create this)
+├── frontend/
+│   ├── src/                # React components
+│   └── package.json        # Node dependencies
+└── README.md           # This file
+```
+
+---
+
+## Next Steps
+
+1. **Get API Keys:**
+   - [Twilio](https://www.twilio.com/)
+   - [ElevenLabs](https://elevenlabs.io/)
+   - [OpenAI](https://platform.openai.com/)
+   - [Bright Data](https://brightdata.com/) (optional)
+
+2. **Test in Dummy Mode:**
+   - Run without API keys to see the dashboard
+   - Uses dummy data for leads
+   - No actual calls made
+
+3. **Run 10 Test Calls:**
+   - Add API keys
+   - Scrape 10 leads
+   - Make real calls to test numbers
+   - Review transcripts
+
+4. **Scale to 100+ Calls/Week:**
+   - Refine scripts based on feedback
+   - Monitor conversion rates
+   - Integrate with your CRM
+
+---
+
+## Troubleshooting
+
+**"No leads scraped"**
+- Check Bright Data API token
+- If missing, dummy data is used automatically
+
+**"Calls not connecting"**
+- Verify Twilio credentials
+- Check phone number format (+44...)
+
+**"Voice sounds robotic"**
+- Update ElevenLabs agent ID
+- Try different voices in ElevenLabs dashboard
+
+**"Transcripts missing"**
+- Check OpenAI API key
+- Verify quota not exceeded
+
+---
+
+## Support
+
+For questions or custom implementations:
+- GitHub Issues: [github.com/gatosa12/my_ai_intern/issues](https://github.com/gatosa12/my_ai_intern/issues)
+- Original by: [Siraj Raval](https://github.com/llSourcell)
+
+---
+
+## License
+
+MIT License - Free to use and modify.
