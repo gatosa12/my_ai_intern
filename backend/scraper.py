@@ -1,4 +1,3 @@
-import asyncio
 import subprocess
 import json
 import os
@@ -6,315 +5,190 @@ import tempfile
 from config import get_config
 import logging
 
-# Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+# ── MCP CONFIG HELPERS ───────────────────────────────────────────────────────────
+
 def create_mcp_config(api_token, web_unlocker_zone=None, browser_auth=None):
-    """Create a temporary MCP configuration file with Bright Data settings"""
+    """Create a temporary MCP configuration file with Bright Data settings."""
     config = {
-        "mcpServers": {
-            "Bright Data": {
-                "command": "npx",
-                "args": ["@brightdata/mcp"],
-                "env": {
-                    "API_TOKEN": api_token
-                }
+        'mcpServers': {
+            'Bright Data': {
+                'command': 'npx',
+                'args': ['@brightdata/mcp'],
+                'env': {'API_TOKEN': api_token}
             }
         }
     }
-    
     if web_unlocker_zone:
-        config["mcpServers"]["Bright Data"]["env"]["WEB_UNLOCKER_ZONE"] = web_unlocker_zone
-    
+        config['mcpServers']['Bright Data']['env']['WEB_UNLOCKER_ZONE'] = web_unlocker_zone
     if browser_auth:
-        config["mcpServers"]["Bright Data"]["env"]["BROWSER_AUTH"] = browser_auth
-    
-    temp_config = tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False)
-    json.dump(config, temp_config)
-    temp_config.close()
-    
-    return temp_config.name
+        config['mcpServers']['Bright Data']['env']['BROWSER_AUTH'] = browser_auth
+    tmp = tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False)
+    json.dump(config, tmp)
+    tmp.close()
+    return tmp.name
+
 
 def run_mcp_scraper(prompt, config_path):
-    """Run a Bright Data MCP scraping task using the MCP client"""
+    """Run a Bright Data MCP scraping task and return parsed results."""
     try:
-        cmd = ["npx", "@brightdata/mcp-client", "--config", config_path, "--prompt", prompt]
+        cmd = ['npx', '@brightdata/mcp-client', '--config', config_path, '--prompt', prompt]
         result = subprocess.run(cmd, capture_output=True, text=True)
-        
         if result.returncode != 0:
-            logger.error(f"MCP client error: {result.stderr}")
+            logger.error(f'MCP client error: {result.stderr}')
             return []
-        
-        # Parse the output to extract structured data
-        try:
-            # The output might contain logs and other information before the JSON
-            # Look for a valid JSON object in the output
-            output_lines = result.stdout.strip().split('\n')
-            json_data = None
-            
-            for line in output_lines:
-                line = line.strip()
-                if line.startswith('{') and line.endswith('}'):
-                    try:
-                        json_data = json.loads(line)
-                        break
-                    except json.JSONDecodeError:
-                        continue
-            
-            if json_data and 'agents' in json_data:
-                return json_data['agents']
-            elif json_data:
-                return [json_data]
-            else:
-                logger.warning("No valid JSON data found in MCP output")
-                return []
-                
-        except json.JSONDecodeError:
-            logger.error(f"Failed to parse MCP output: {result.stdout}")
-            return []
-            
+        for line in result.stdout.strip().split('\n'):
+            line = line.strip()
+            if line.startswith('{') and line.endswith('}'):
+                try:
+                    data = json.loads(line)
+                    if 'agents' in data:
+                        return data['agents']
+                    return [data]
+                except json.JSONDecodeError:
+                    continue
+        return []
     except Exception as e:
-        logger.error(f"Error running MCP client: {str(e)}")
+        logger.error(f'Error running MCP client: {e}')
         return []
     finally:
-        # Clean up the temporary config file
         if os.path.exists(config_path):
             os.unlink(config_path)
 
-def scrape_realtor_agents(location="Austin, TX", limit=30):
-    """Scrape real estate agents from Realtor.com using Bright Data MCP"""
-    config = get_config()
-    api_token = config['BRIGHTDATA_API_TOKEN']
-    web_unlocker_zone = config['BRIGHTDATA_WEB_UNLOCKER_ZONE']
-    browser_auth = config.get('BRIGHTDATA_BROWSER_AUTH', '')
-    
-    if not api_token:
-        logger.warning("No Bright Data API token provided. Using dummy data.")
-        return generate_dummy_agents(location, limit)
-    
-    # Create MCP config file
-    config_path = create_mcp_config(api_token, web_unlocker_zone, browser_auth)
-    
-    # Craft the prompt for agent extraction
-    prompt = f"Extract data for {limit} real estate agents in {location} from Realtor.com. For each agent, get their name, phone number, brokerage name, address, and website if available. Return as structured JSON."
-    
-    # Run the MCP scraper
-    agents = run_mcp_scraper(prompt, config_path)
-    
-    # Process and format the results
-    formatted_agents = []
-    for agent in agents[:limit]:
-        formatted_agents.append({
-            'name': agent.get('name', 'Unknown Agent'),
-            'phone': agent.get('phone', 'N/A'),
-            'category': 'Real Estate Agent',
-            'address': agent.get('address', f'{location}'),
-            'website': agent.get('website', '')
-        })
-    
-    return formatted_agents
 
-def scrape_zillow_agents(location="Austin, TX", limit=30):
-    """Scrape real estate agents from Zillow using Bright Data MCP"""
-    config = get_config()
-    api_token = config['BRIGHTDATA_API_TOKEN']
-    web_unlocker_zone = config['BRIGHTDATA_WEB_UNLOCKER_ZONE']
-    browser_auth = config.get('BRIGHTDATA_BROWSER_AUTH', '')
-    
-    if not api_token:
-        logger.warning("No Bright Data API token provided. Using dummy data.")
-        return generate_dummy_agents(location, limit)
-    
-    # Create MCP config file
-    config_path = create_mcp_config(api_token, web_unlocker_zone, browser_auth)
-    
-    # Craft the prompt for agent extraction
-    prompt = f"Extract data for {limit} real estate agents in {location} from Zillow.com. For each agent, get their name, phone number, brokerage name, address, and website if available. Return as structured JSON."
-    
-    # Run the MCP scraper
-    agents = run_mcp_scraper(prompt, config_path)
-    
-    # Process and format the results
-    formatted_agents = []
-    for agent in agents[:limit]:
-        formatted_agents.append({
-            'name': agent.get('name', 'Unknown Agent'),
-            'phone': agent.get('phone', 'N/A'),
-            'category': 'Real Estate Agent',
-            'address': agent.get('address', f'{location}'),
-            'website': agent.get('website', '')
-        })
-    
-    return formatted_agents
+# ── CARE HOME SCRAPER (Sussex Staffing Solutions) ─────────────────────────────────
 
-def mine_social_media_for_buyers(location="Austin, TX", limit=20):
-    """Mine social media for buyer intent signals using Bright Data MCP"""
+def scrape_care_homes(location='Sussex, UK', limit=30):
+    """
+    Scrape CQC-registered care homes in the target area using Bright Data MCP.
+    Falls back to dummy data if no API key is set.
+    """
     config = get_config()
-    api_token = config['BRIGHTDATA_API_TOKEN']
-    web_unlocker_zone = config['BRIGHTDATA_WEB_UNLOCKER_ZONE']
+    api_token = config.get('BRIGHTDATA_API_TOKEN', '')
+    web_unlocker_zone = config.get('BRIGHTDATA_WEB_UNLOCKER_ZONE', '')
     browser_auth = config.get('BRIGHTDATA_BROWSER_AUTH', '')
-    
+
     if not api_token:
-        logger.warning("No Bright Data API token provided. Using dummy data.")
-        return generate_dummy_buyers(location, limit)
-    
-    # Create MCP config file
+        logger.warning('No Bright Data API token — using dummy care home data.')
+        return generate_dummy_care_homes(location, limit)
+
     config_path = create_mcp_config(api_token, web_unlocker_zone, browser_auth)
-    
-    # Craft prompts for different platforms
-    platforms = [
-        {
-            "name": "Reddit",
-            "prompt": f"Find recent posts on Reddit where people are talking about moving to {location} or looking for housing in {location}. Extract their requirements, budget if mentioned, and any other relevant details. Return as structured JSON."
-        },
-        {
-            "name": "Twitter",
-            "prompt": f"Find recent tweets where people mention moving to {location}, looking for houses in {location}, or needing a real estate agent in {location}. Return as structured JSON."
-        },
-        {
-            "name": "Facebook Groups",
-            "prompt": f"Find housing or real estate focused Facebook groups for {location} and extract recent posts from people looking to buy or rent. Return as structured JSON."
-        }
+    prompt = (
+        f'Extract data for {limit} CQC-registered care homes in {location} '
+        f'from https://www.cqc.org.uk/search?query=care+home&location={location}. '
+        f'For each home get: name, phone number, address, type (nursing home or residential), '
+        f'number of beds, manager name if available. Return as structured JSON.'
+    )
+    raw = run_mcp_scraper(prompt, config_path)
+    results = []
+    for item in raw[:limit]:
+        name = item.get('name', 'Unknown Care Home')
+        category = 'Nursing Home' if 'nurs' in name.lower() else 'Residential Care Home'
+        priority = 'HIGH' if category == 'Nursing Home' else 'MEDIUM'
+        results.append({
+            'name': name,
+            'phone': item.get('phone', 'N/A'),
+            'category': category,
+            'address': item.get('address', location),
+            'website': item.get('website', ''),
+            'priority': priority,
+            'buyer_count': 0
+        })
+    return results
+
+
+def generate_dummy_care_homes(location='Sussex, UK', limit=30):
+    """Dummy care home data for testing without API keys."""
+    home_types = [
+        ('Sunrise Nursing Home', 'Nursing Home', 'HIGH'),
+        ('Seaview Residential', 'Residential Care Home', 'MEDIUM'),
+        ('Brighton Care Centre', 'Nursing Home', 'HIGH'),
+        ('Sussex Manor', 'Residential Care Home', 'MEDIUM'),
+        ('Eastbourne Nursing Lodge', 'Nursing Home', 'HIGH'),
     ]
-    
-    all_buyers = []
-    for platform in platforms:
-        # Run the MCP scraper for each platform
-        buyers = run_mcp_scraper(platform["prompt"], config_path)
-        all_buyers.extend(buyers)
-        
-        # Recreate config file for each platform
-        config_path = create_mcp_config(api_token, web_unlocker_zone, browser_auth)
-    
-    # Process and format the results
-    formatted_buyers = []
-    for buyer in all_buyers[:limit]:
-        formatted_buyers.append({
-            'platform': buyer.get('platform', 'Unknown'),
-            'user_id': buyer.get('user_id', 'anonymous'),
-            'post_content': buyer.get('content', ''),
-            'location_interest': buyer.get('location', location),
-            'requirements': buyer.get('requirements', ''),
-            'budget': buyer.get('budget', 'Not specified'),
-            'timestamp': buyer.get('timestamp', '')
-        })
-    
-    return formatted_buyers
-
-def match_buyers_to_agents(buyers, agents, location="Austin, TX"):
-    """Match potential buyers with suitable real estate agents based on location and requirements"""
-    matches = []
-    
-    for agent in agents:
-        # Extract zip code from agent address if available
-        agent_zip = extract_zip_from_address(agent['address']) or location
-        
-        matched_buyers = []
-        for buyer in buyers:
-            # Check if buyer's location interest matches agent's area
-            if location_match(buyer['location_interest'], agent_zip):
-                matched_buyers.append(buyer)
-        
-        if matched_buyers:
-            matches.append({
-                'agent': agent,
-                'potential_buyers': matched_buyers,
-                'buyer_count': len(matched_buyers)
-            })
-    
-    # Sort matches by number of potential buyers (descending)
-    matches.sort(key=lambda x: x['buyer_count'], reverse=True)
-    
-    return matches
-
-def extract_zip_from_address(address):
-    """Extract zip code from an address string"""
-    # Simple implementation - would need to be more robust in production
-    parts = address.split()
-    for part in parts:
-        if len(part) == 5 and part.isdigit():
-            return part
-    return None
-
-def location_match(buyer_location, agent_location):
-    """Check if buyer and agent locations match"""
-    # Simple implementation - in production would use more sophisticated geo-matching
-    return buyer_location.lower() in agent_location.lower() or agent_location.lower() in buyer_location.lower()
-
-def generate_dummy_agents(location="Austin, TX", limit=30):
-    """Generate dummy agent data when API key is not available"""
-    dummy_agents = []
-    brokerages = ["Century 21", "RE/MAX", "Keller Williams", "Coldwell Banker", "Sotheby's"]
-    
+    dummy = []
     for i in range(limit):
-        dummy_agents.append({
-            'name': f"Agent Smith {i+1}",
-            'phone': f"512-555-{1000+i}",
-            'category': 'Real Estate Agent',
-            'address': f"{100+i} Main St, {location}",
-            'website': f"https://agent{i+1}.realtor.example.com"
+        t = home_types[i % len(home_types)]
+        dummy.append({
+            'name': f'{t[0]} {i + 1}',
+            'phone': f'01273 55{1000 + i}',
+            'category': t[1],
+            'address': f'{100 + i} High Street, {location}',
+            'website': '',
+            'priority': t[2],
+            'buyer_count': 0
         })
-    
-    return dummy_agents
+    return dummy
 
-def generate_dummy_buyers(location="Austin, TX", limit=20):
-    """Generate dummy buyer data when API key is not available"""
-    dummy_buyers = []
-    platforms = ["Reddit", "Twitter", "Facebook"]
-    requirements = [
-        "3BR/2BA single family home",
-        "Condo near downtown",
-        "House with yard for dogs",
-        "New construction in suburbs",
-        "Townhouse with garage"
-    ]
-    
+
+# ── ROOFING LEAD SCRAPER ─────────────────────────────────────────────────────────────
+
+def scrape_roofing_leads(location='Brighton, UK', limit=30):
+    """
+    Scrape homeowner/roofing leads via Google Maps using Bright Data MCP.
+    Falls back to dummy data if no API key is set.
+    """
+    config = get_config()
+    api_token = config.get('BRIGHTDATA_API_TOKEN', '')
+    web_unlocker_zone = config.get('BRIGHTDATA_WEB_UNLOCKER_ZONE', '')
+    browser_auth = config.get('BRIGHTDATA_BROWSER_AUTH', '')
+
+    if not api_token:
+        logger.warning('No Bright Data API token — using dummy roofing data.')
+        return generate_dummy_roofing_leads(location, limit)
+
+    config_path = create_mcp_config(api_token, web_unlocker_zone, browser_auth)
+    prompt = (
+        f'Find {limit} residential properties or homeowners in {location} '
+        f'who may need roofing services. Search Google Maps for '
+        f'"houses {location}" and extract: address, postcode, any contact info. '
+        f'Also search local Facebook groups for posts mentioning roof damage, '
+        f'leaks, or roofing work in {location}. Return as structured JSON.'
+    )
+    raw = run_mcp_scraper(prompt, config_path)
+    results = []
+    for item in raw[:limit]:
+        results.append({
+            'name': item.get('name', 'Homeowner'),
+            'phone': item.get('phone', 'N/A'),
+            'category': 'Roofing Lead',
+            'address': item.get('address', location),
+            'website': '',
+            'priority': 'MEDIUM',
+            'buyer_count': 0
+        })
+    return results
+
+
+def generate_dummy_roofing_leads(location='Brighton, UK', limit=30):
+    """Dummy roofing lead data for testing without API keys."""
+    issues = ['Roof leak', 'Storm damage', 'Missing tiles', 'Flat roof repair', 'Guttering']
+    dummy = []
     for i in range(limit):
-        platform = platforms[i % len(platforms)]
-        requirement = requirements[i % len(requirements)]
-        
-        dummy_buyers.append({
-            'platform': platform,
-            'user_id': f"user{i+1}",
-            'post_content': f"Looking to move to {location} soon. Need help finding a {requirement}.",
-            'location_interest': location,
-            'requirements': requirement,
-            'budget': f"${300000 + (i * 50000)}",
-            'timestamp': "2023-05-01"
+        dummy.append({
+            'name': f'Homeowner {i + 1}',
+            'phone': f'07700 90{1000 + i}',
+            'category': 'Roofing Lead',
+            'address': f'{10 + i} Church Road, {location}',
+            'website': '',
+            'priority': 'MEDIUM',
+            'issue': issues[i % len(issues)],
+            'buyer_count': 0
         })
-    
-    return dummy_buyers
+    return dummy
 
-def scrape_real_estate_leads(location="Austin, TX", limit=30):
-    """Main function to scrape real estate agents and match with potential buyers"""
-    # Get agents from multiple sources
-    realtor_agents = scrape_realtor_agents(location, limit//2)
-    zillow_agents = scrape_zillow_agents(location, limit//2)
-    
-    # Combine agents from different sources
-    all_agents = realtor_agents + zillow_agents
-    
-    # Mine social media for buyer intent signals
-    buyers = mine_social_media_for_buyers(location, limit)
-    
-    # Match buyers with agents
-    matches = match_buyers_to_agents(buyers, all_agents, location)
-    
-    # Return matched agents with buyer counts
-    enhanced_agents = []
-    for match in matches:
-        agent = match['agent'].copy()
-        agent['buyer_count'] = match['buyer_count']
-        enhanced_agents.append(agent)
-    
-    # If we don't have enough matches, add remaining agents
-    if len(enhanced_agents) < limit:
-        for agent in all_agents:
-            if agent not in [a for a in enhanced_agents]:
-                agent['buyer_count'] = 0
-                enhanced_agents.append(agent)
-                if len(enhanced_agents) >= limit:
-                    break
-    
-    return enhanced_agents[:limit]
+
+# ── MAIN ENTRY POINT (keeps backward compat with app.py) ───────────────────────────
+
+def scrape_real_estate_leads(location='Sussex, UK', limit=30, mode='sussex_staffing'):
+    """
+    Main scraping entry point.
+    mode: 'sussex_staffing' (care homes) or 'roofing' (homeowners).
+    Keeps the original function name so app.py doesn't need changing.
+    """
+    if mode == 'roofing':
+        return scrape_roofing_leads(location, limit)
+    return scrape_care_homes(location, limit)
