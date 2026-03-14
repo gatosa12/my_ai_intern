@@ -1,0 +1,217 @@
+{
+  "meta": {
+    "from": "sourcing",
+    "to": "architect",
+    "status": "unread",
+    "timestamp": "2026-03-14T00:02:00Z",
+    "message": "HCA Eastbourne brief received and processed. Search strategy, Boolean strings, boards, and ranked candidate shortlist template below. Key filter: driving licence + own vehicle with business use insurance — non-negotiable, applied at first contact."
+  },
+  "sourcing_response": {
+    "role_summary": {
+      "title": "Healthcare Assistant (HCA)",
+      "setting": "Domiciliary care provider, Eastbourne BN21",
+      "shift": "Full time, Monday–Friday days",
+      "pay": "PAYE £13.50/hr",
+      "start": "Within 2 weeks",
+      "priority": "URGENT"
+    },
+
+    "search_strategy": {
+      "overview": "Domiciliary HCA roles with a driving requirement attract a distinct candidate profile from residential care: community-focused, independently mobile, often preferring the Mon–Fri day pattern for work-life balance. £13.50 PAYE is competitive for East Sussex community care (2026 benchmarks). The 2-week start window is achievable given no night shifts and a straightforward compliance set — DBS on update service candidates can move fastest.",
+      "primary_approach": [
+        "Database search — filter existing Sussex Staffing HCA/care assistant pool for: East Sussex / BN postcode, driver + own car, domiciliary or community experience, Mon–Fri daytime availability",
+        "CV board search — Reed, Indeed Resume, CV-Library with BN postcode radius and driving licence filter",
+        "Live job board advertising — post immediately to Reed, Indeed, and care-specific boards with Mon–Fri/driver emphasis in headline",
+        "Facebook sourcing — Eastbourne and East Sussex care worker groups; Mon–Fri days framing is a strong draw for carers with family commitments",
+        "Referral push — ask any current HCA/care assistant candidates on books for driver contacts in the Eastbourne area",
+        "Domiciliary care provider outreach — community carers sometimes move between agencies; local domiciliary providers in BN21–BN23 postcodes may have lapsed or available staff"
+      ]
+    },
+
+    "boolean_search_strings": {
+      "linkedin_xray_google": {
+        "string": "site:linkedin.com/in (\"Healthcare Assistant\" OR \"HCA\" OR \"Care Assistant\" OR \"Community Carer\") (\"driving licence\" OR \"own car\" OR \"driver\") (\"Eastbourne\" OR \"BN21\" OR \"BN22\" OR \"BN23\" OR \"BN20\" OR \"East Sussex\")",
+        "notes": "Run via Google X-ray. Prioritise BN21/BN22/BN23 postcodes (Eastbourne core). Filter to profiles updated in last 12 months. Look for 'domiciliary', 'community care', 'home care', or 'supported living' in experience."
+      },
+      "cv_database_reed_totaljobs": {
+        "string": "(\"Healthcare Assistant\" OR \"HCA\" OR \"Care Assistant\" OR \"Community Carer\" OR \"Support Worker\") AND (\"driving licence\" OR \"full UK licence\" OR \"own car\" OR \"own vehicle\") AND (\"Eastbourne\" OR \"BN21\" OR \"BN22\" OR \"BN23\" OR \"BN20\" OR \"East Sussex\") AND (\"domiciliary\" OR \"community care\" OR \"home care\" OR \"care in the home\")",
+        "notes": "Use on Reed CV Search, CV-Library, and Indeed Resume. Radius: 10 miles from BN21. Sort by last active — prioritise updated within 90 days. Must flag if no driving licence mentioned — do not progress without it."
+      },
+      "indeed_job_post_title_and_description": {
+        "title": "Healthcare Assistant (HCA) — Domiciliary Care | Mon–Fri Days | Eastbourne",
+        "key_terms": "community care, own car essential, full UK driving licence, £13.50 PAYE, Monday to Friday, no weekends, Eastbourne BN21, 6 months care experience, enhanced DBS",
+        "notes": "Mon–Fri days and no weekends should be prominent in the headline — strong differentiator that will draw applicants away from weekend-rota residential roles. Sponsored post recommended."
+      },
+      "facebook_group_post_template": {
+        "string": "Are you a Healthcare Assistant or Care Worker based in Eastbourne or East Sussex with your own car? We have a great Mon–Fri days role with a domiciliary care provider in BN21. No weekends! £13.50/hr PAYE | Own vehicle + full UK driving licence essential | 6 months UK care experience required | Enhanced DBS needed | Start within 2 weeks. DM us or comment below — happy to have a quick chat!",
+        "notes": "Post to: 'Care Workers East Sussex', 'Eastbourne Jobs', 'Healthcare Jobs Sussex', 'HCA & Care Assistant Jobs UK', 'Eastbourne & District Community'. Emphasise no weekends — this is the strongest draw for this candidate profile."
+      }
+    },
+
+    "recommended_job_boards": [
+      {
+        "rank": 1,
+        "board": "Reed.co.uk",
+        "reason": "Strongest CV database for care roles in South East England. Radius and driving licence filters available.",
+        "action": "Post role + run CV search with Boolean string above; radius 10 miles from BN21"
+      },
+      {
+        "rank": 2,
+        "board": "Indeed UK",
+        "reason": "Highest UK traffic. Domiciliary/community care HCA ads perform well. Sponsored boost recommended given 2-week window.",
+        "action": "Post with sponsored boost; search Indeed Resume for BN-postcode drivers with care experience"
+      },
+      {
+        "rank": 3,
+        "board": "CV-Library / Totaljobs",
+        "reason": "Strong care sector presence in East Sussex. Good volume of community care candidates.",
+        "action": "Post and run CV database search with Boolean string; filter last active 90 days"
+      },
+      {
+        "rank": 4,
+        "board": "Carehome.co.uk / CareJob.co.uk",
+        "reason": "Specialist care sector boards — higher intent applicants, though more residential-focused. Worth posting.",
+        "action": "Post role; note it is domiciliary/community, not residential, in description"
+      },
+      {
+        "rank": 5,
+        "board": "Social Care Jobs (socialcarejobs.com)",
+        "reason": "BASW-affiliated board — strong for qualified and experienced care staff in community settings.",
+        "action": "Post role — free or low cost; good for passive experienced candidates"
+      },
+      {
+        "rank": 6,
+        "board": "Facebook Groups (local East Sussex)",
+        "reason": "Community carers in Eastbourne are very active in local Facebook groups. Mon–Fri framing drives high engagement.",
+        "action": "Deploy Facebook post template above across 5 identified groups"
+      },
+      {
+        "rank": 7,
+        "board": "LinkedIn Jobs",
+        "reason": "Lower volume for HCA roles but useful for X-ray search of local profiles and InMail outreach.",
+        "action": "Post role and run X-ray Boolean search; InMail top local HCA profiles with driver status"
+      }
+    ],
+
+    "screening_checklist": {
+      "pre_outreach": [
+        "Confirm candidate holds a valid full UK driving licence — check CV/profile before calling",
+        "Confirm candidate mentions own vehicle or ability to drive own car — do not call if no indication"
+      ],
+      "first_call": [
+        "Confirm full UK driving licence — valid, not provisional, not disqualified",
+        "Confirm own vehicle available for work use",
+        "Confirm they have (or are willing to obtain) business use insurance — explain it is a client requirement; flag if they refuse",
+        "Confirm minimum 6 months UK care experience — ask for employer name and dates for reference verification",
+        "Confirm right to work in UK — if sponsorship required, do not progress",
+        "Confirm Mon–Fri daytime availability — full time hours",
+        "Confirm availability to start within 2 weeks",
+        "Ask DBS status — on update service? If not, initiate new enhanced check immediately given 2-week window"
+      ],
+      "compliance_to_complete_before_submission": [
+        "Enhanced DBS — on update service preferred; if not, initiate check immediately (2-week window is tight)",
+        "Right to work documents — passport or share code",
+        "Two professional references — most recent employer must be included; care sector reference essential for 6-month experience verification",
+        "Driving licence — physical licence check or DVLA check code",
+        "Proof of own vehicle — V5C or insurance certificate",
+        "Business use insurance confirmation — certificate or declaration",
+        "6 months UK care experience verified via reference or employment history documentation"
+      ]
+    },
+
+    "ranked_candidate_shortlist_template": {
+      "instructions": "Complete one entry per screened candidate. Rank by: (1) BN21/Eastbourne locality, (2) domiciliary care experience, (3) DBS update service status (fastest to place), (4) compliance completeness. Do not set submission_ready to true until all compliance confirmed — especially driving licence, own vehicle, and business use insurance.",
+      "candidates": [
+        {
+          "rank": 1,
+          "candidate_ref": "CAND-001",
+          "name": "[Full Name]",
+          "postcode": "[Home postcode]",
+          "distance_from_bn21": "[miles]",
+          "months_uk_care_experience": "[number]",
+          "care_setting": "[domiciliary / residential / both]",
+          "driving_licence": "[Y/N — full UK]",
+          "own_vehicle": "[Y/N]",
+          "business_use_insurance": "[Y/N / willing to obtain]",
+          "dbs_status": "[none / applied / on update service]",
+          "availability_start": "[date]",
+          "right_to_work_confirmed": "[Y/N]",
+          "pay_type": "PAYE",
+          "compliance_status": {
+            "dbs_enhanced": false,
+            "rtw_docs": false,
+            "references_received": false,
+            "licence_verified": false,
+            "vehicle_proof": false,
+            "business_insurance_confirmed": false,
+            "experience_verified": false
+          },
+          "submission_ready": false,
+          "sourcing_notes": "[Source channel, call notes, any flags]"
+        },
+        {
+          "rank": 2,
+          "candidate_ref": "CAND-002",
+          "name": "[Full Name]",
+          "postcode": "[Home postcode]",
+          "distance_from_bn21": "[miles]",
+          "months_uk_care_experience": "[number]",
+          "care_setting": "[domiciliary / residential / both]",
+          "driving_licence": "[Y/N — full UK]",
+          "own_vehicle": "[Y/N]",
+          "business_use_insurance": "[Y/N / willing to obtain]",
+          "dbs_status": "[none / applied / on update service]",
+          "availability_start": "[date]",
+          "right_to_work_confirmed": "[Y/N]",
+          "pay_type": "PAYE",
+          "compliance_status": {
+            "dbs_enhanced": false,
+            "rtw_docs": false,
+            "references_received": false,
+            "licence_verified": false,
+            "vehicle_proof": false,
+            "business_insurance_confirmed": false,
+            "experience_verified": false
+          },
+          "submission_ready": false,
+          "sourcing_notes": "[Source channel, call notes, any flags]"
+        },
+        {
+          "rank": 3,
+          "candidate_ref": "CAND-003",
+          "name": "[Full Name]",
+          "postcode": "[Home postcode]",
+          "distance_from_bn21": "[miles]",
+          "months_uk_care_experience": "[number]",
+          "care_setting": "[domiciliary / residential / both]",
+          "driving_licence": "[Y/N — full UK]",
+          "own_vehicle": "[Y/N]",
+          "business_use_insurance": "[Y/N / willing to obtain]",
+          "dbs_status": "[none / applied / on update service]",
+          "availability_start": "[date]",
+          "right_to_work_confirmed": "[Y/N]",
+          "pay_type": "PAYE",
+          "compliance_status": {
+            "dbs_enhanced": false,
+            "rtw_docs": false,
+            "references_received": false,
+            "licence_verified": false,
+            "vehicle_proof": false,
+            "business_insurance_confirmed": false,
+            "experience_verified": false
+          },
+          "submission_ready": false,
+          "sourcing_notes": "[Source channel, call notes, any flags]"
+        }
+      ]
+    },
+
+    "sourcing_notes": {
+      "pay_competitiveness": "£13.50 PAYE is at the lower end of domiciliary HCA rates in East Sussex (market range £13.00–£14.50 in 2026). Competitive enough to attract candidates, particularly given the Mon–Fri days pattern and no weekends. If sourcing stalls after 48 hours, flag to Architect for rate review.",
+      "dbs_timing_risk": "The 2-week start window is the main risk. Candidates not on the DBS update service will need a fresh enhanced check — currently averaging 5–10 working days in East Sussex. Prioritise update service candidates in first-pass shortlist. Initiate checks immediately on any candidate not on update service who meets all other criteria.",
+      "business_use_insurance_note": "Many HCAs carry social, domestic, and pleasure insurance only. Business use (Class 1) is an additional cost of approximately £20–£60/year. Flag this to candidates early — most are unaware and some may resist. Confirm willingness before progressing. Do not submit without confirmation.",
+      "mon_fri_advantage": "The Mon–Fri days pattern is a genuine competitive advantage for this role. Emphasise 'no weekends' prominently in all advertising and outreach — it will significantly improve response rate from candidates currently working unsociable hours in residential settings.",
+      "urgency_actions": "Three immediate actions on authorisation: (1) Post to Reed and Indeed with sponsored boost — lead headline with 'Mon–Fri Days | No Weekends'. (2) Run CV database search filtering for BN postcode + driving licence. (3) Deploy Facebook post to East Sussex care worker groups. Check DBS update service status in first 60 seconds of every screening call."
+    }
+  }
+}
