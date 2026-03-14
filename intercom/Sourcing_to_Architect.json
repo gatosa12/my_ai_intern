@@ -1,0 +1,199 @@
+{
+  "meta": {
+    "from": "sourcing",
+    "to": "architect",
+    "status": "unread",
+    "timestamp": "2026-03-14T00:01:00Z",
+    "message": "Brief received and processed. Sourcing strategy, Boolean strings, recommended boards, and ranked candidate shortlist template below. Ready to action immediately."
+  },
+  "sourcing_response": {
+    "role_summary": {
+      "title": "Registered General Nurse (RGN)",
+      "location": "Brighton BN1 — residential care home (40 beds)",
+      "shift": "Nights, 3-on-3-off",
+      "pay": "PAYE £22.00/hr | Umbrella £26.00/hr",
+      "priority": "URGENT — ASAP start"
+    },
+
+    "search_strategy": {
+      "overview": "Night-only RGN roles in residential care attract a specific candidate profile: nurses who prefer fixed shift patterns, often with family/lifestyle reasons for working nights, or those supplementing a primary employer. Locality is a priority for the client — BN postcode candidates should be filtered first. NMC pin verification must happen before any outreach.",
+      "primary_approach": [
+        "Active database search — filter existing Sussex Staffing candidate pool for RGN, BN postcode, night availability, care home experience",
+        "Passive pipeline refresh — re-engage lapsed RGN candidates who previously worked nights in care home settings",
+        "Live board advertising — post immediately to key healthcare job boards with night/care home targeting",
+        "Social sourcing — Brighton-area nursing Facebook groups and LinkedIn for local passive candidates",
+        "Referral push — ask any placed RGN candidates currently on books if they know night-available nurses locally"
+      ]
+    },
+
+    "boolean_search_strings": {
+      "linkedin_xray_google": {
+        "string": "site:linkedin.com/in (\"Registered Nurse\" OR \"RGN\" OR \"Registered General Nurse\") (\"NMC\" OR \"NMC pin\") (\"Brighton\" OR \"Hove\" OR \"BN1\" OR \"BN2\" OR \"BN3\" OR \"BN41\" OR \"BN42\") (\"care home\" OR \"residential care\" OR \"nursing home\")",
+        "notes": "Run via Google X-ray to surface local LinkedIn profiles not actively job-hunting. Filter results by BN postcodes first."
+      },
+      "cv_database_reed_totaljobs": {
+        "string": "(\"RGN\" OR \"Registered General Nurse\" OR \"Registered Nurse\") AND (\"NMC\" OR \"NMC pin\") AND (\"Brighton\" OR \"Hove\" OR \"BN\") AND (\"care home\" OR \"residential care\" OR \"nursing home\") AND (\"nights\" OR \"night shift\" OR \"night duty\")",
+        "notes": "Use on Reed CV Search, Totaljobs CV Library, and Indeed Resume. Radius filter: 10 miles from BN1. Sort by last active date — prioritise updated within last 90 days."
+      },
+      "indeed_job_post_targeting": {
+        "string": "RGN night shifts Brighton care home — PAYE or umbrella, 3-on-3-off, ASAP start, active NMC required",
+        "notes": "Job title field: 'Registered Nurse (RGN) — Nights'. Location: Brighton BN1. Tick 'Temporary / Contract'. Sponsored post recommended given urgency."
+      },
+      "facebook_group_post_template": {
+        "string": "Are you an RGN based in Brighton or Hove looking for regular night shifts? We have an urgent ongoing placement at a friendly 40-bed residential care home in BN1. 3-on-3-off nights | PAYE £22/hr or umbrella £26/hr | Active NMC pin required | Start ASAP. DM us or drop your number below.",
+        "notes": "Post to: 'Nurses in Brighton', 'Sussex Healthcare Jobs', 'NMC Registered Nurses UK — Jobs & Locum Work', 'Brighton & Hove Health Workers'. Pin post if admin permits."
+      }
+    },
+
+    "recommended_job_boards": [
+      {
+        "rank": 1,
+        "board": "Reed.co.uk",
+        "reason": "Largest UK CV database; strong healthcare filter and radius search. High volume of active RGN candidates.",
+        "action": "Post role + run CV search immediately"
+      },
+      {
+        "rank": 2,
+        "board": "Indeed UK",
+        "reason": "Highest traffic job board in UK. Sponsored posting increases visibility significantly for urgent roles.",
+        "action": "Post with sponsored boost; also search Indeed Resume for local RGNs"
+      },
+      {
+        "rank": 3,
+        "board": "Totaljobs / CV-Library",
+        "reason": "Strong healthcare section, good CV database for South East England nurses.",
+        "action": "Post role and run CV database search with Boolean string above"
+      },
+      {
+        "rank": 4,
+        "board": "NHS Jobs (nhsjobs.com)",
+        "reason": "Many nurses browse NHS Jobs even when considering private/agency work. Free to post.",
+        "action": "Post role — flag clearly it is an agency/temp placement at a private care home"
+      },
+      {
+        "rank": 5,
+        "board": "Nursing Direct / Nurse Plus / Medacs (competitor intelligence)",
+        "reason": "Monitor these agency boards to understand local market supply and benchmark pay competitiveness.",
+        "action": "Review their live Brighton RGN ads — if they are paying higher, flag to Architect for pay review"
+      },
+      {
+        "rank": 6,
+        "board": "LinkedIn Jobs",
+        "reason": "Useful for passive candidate outreach via InMail; less volume but higher quality engagement.",
+        "action": "Post role and run X-ray Boolean search; InMail top 10 local RGN profiles"
+      },
+      {
+        "rank": 7,
+        "board": "Facebook Groups (local)",
+        "reason": "Brighton nursing communities are active on Facebook. Night workers often source shifts informally here.",
+        "action": "Deploy Facebook post template above across 4 identified groups"
+      }
+    ],
+
+    "screening_checklist": {
+      "pre_outreach": [
+        "Verify NMC pin active at nmc.org.uk/registration-search — do NOT contact if lapsed or flagged",
+        "Confirm right to work — if candidate mentions visa/sponsorship need, do not progress"
+      ],
+      "first_call": [
+        "Confirm availability for nights, 3-on-3-off pattern",
+        "Confirm minimum 2 years post-registration experience",
+        "Confirm no active or pending NMC fitness-to-practise proceedings",
+        "Ask directly: 'Have you ever left a role under a disciplinary investigation or action?' — if yes, do not submit",
+        "Confirm location / commute to BN1 — flag if outside Brighton & Hove"
+      ],
+      "compliance_to_complete_before_submission": [
+        "NMC pin active status — screenshot or reference number logged",
+        "Right to work documents — passport or share code",
+        "Two professional references — most recent employer must be included",
+        "Enhanced DBS — on update service preferred; if not, initiate new check",
+        "Occupational health clearance"
+      ]
+    },
+
+    "ranked_candidate_shortlist_template": {
+      "instructions": "Complete one entry per screened candidate. Rank by: (1) BN postcode locality, (2) care home night shift experience, (3) compliance completeness, (4) availability speed. Do not populate 'submission_ready' as true until all compliance checks confirmed.",
+      "candidates": [
+        {
+          "rank": 1,
+          "candidate_ref": "CAND-001",
+          "name": "[Full Name]",
+          "nmc_pin": "[PIN — verified Y/N]",
+          "postcode": "[Home postcode]",
+          "distance_from_bn1": "[miles]",
+          "years_post_reg": "[number]",
+          "care_home_experience": "[Y/N — detail]",
+          "night_shift_experience": "[Y/N]",
+          "pay_preference": "[PAYE / Umbrella]",
+          "availability_start": "[date]",
+          "right_to_work_confirmed": "[Y/N]",
+          "disciplinary_flag": "[Y/N — if Y, do not submit]",
+          "compliance_status": {
+            "nmc_verified": false,
+            "rtw_docs": false,
+            "references_received": false,
+            "dbs_status": "[none/applied/on update service]",
+            "occ_health": false
+          },
+          "submission_ready": false,
+          "sourcing_notes": "[Source channel, call notes, any flags]"
+        },
+        {
+          "rank": 2,
+          "candidate_ref": "CAND-002",
+          "name": "[Full Name]",
+          "nmc_pin": "[PIN — verified Y/N]",
+          "postcode": "[Home postcode]",
+          "distance_from_bn1": "[miles]",
+          "years_post_reg": "[number]",
+          "care_home_experience": "[Y/N — detail]",
+          "night_shift_experience": "[Y/N]",
+          "pay_preference": "[PAYE / Umbrella]",
+          "availability_start": "[date]",
+          "right_to_work_confirmed": "[Y/N]",
+          "disciplinary_flag": "[Y/N — if Y, do not submit]",
+          "compliance_status": {
+            "nmc_verified": false,
+            "rtw_docs": false,
+            "references_received": false,
+            "dbs_status": "[none/applied/on update service]",
+            "occ_health": false
+          },
+          "submission_ready": false,
+          "sourcing_notes": "[Source channel, call notes, any flags]"
+        },
+        {
+          "rank": 3,
+          "candidate_ref": "CAND-003",
+          "name": "[Full Name]",
+          "nmc_pin": "[PIN — verified Y/N]",
+          "postcode": "[Home postcode]",
+          "distance_from_bn1": "[miles]",
+          "years_post_reg": "[number]",
+          "care_home_experience": "[Y/N — detail]",
+          "night_shift_experience": "[Y/N]",
+          "pay_preference": "[PAYE / Umbrella]",
+          "availability_start": "[date]",
+          "right_to_work_confirmed": "[Y/N]",
+          "disciplinary_flag": "[Y/N — if Y, do not submit]",
+          "compliance_status": {
+            "nmc_verified": false,
+            "rtw_docs": false,
+            "references_received": false,
+            "dbs_status": "[none/applied/on update service]",
+            "occ_health": false
+          },
+          "submission_ready": false,
+          "sourcing_notes": "[Source channel, call notes, any flags]"
+        }
+      ]
+    },
+
+    "sourcing_notes": {
+      "pay_competitiveness": "PAYE £22/hr and umbrella £26/hr are mid-market for Brighton RGN nights in residential care (2026 benchmarks). Sufficient to attract candidates but not premium. If sourcing stalls after 48hrs, recommend flagging to Architect for rate review.",
+      "night_shift_supply_note": "Night-only 3-on-3-off is a popular pattern for experienced nurses with caring responsibilities or second jobs. Expect reasonable response rate from passive candidates if Facebook and Indeed posts go live promptly.",
+      "locality_note": "BN1 is central Brighton. Candidates from BN2 (Kemptown/Hanover), BN3 (Hove), BN41 (Fishersgate/Portslade) all within 5 miles and commutable by car or public transport. Widen to BN postcodes broadly for first pass — flag distance clearly on any submission.",
+      "urgency_actions": "Three immediate actions on authorisation: (1) Post to Reed and Indeed with sponsored boost. (2) Run CV database search — target last-active within 90 days. (3) Deploy Facebook post to Brighton nursing groups. Referral ask to existing nurses on books should go out same day."
+    }
+  }
+}
