@@ -4,52 +4,52 @@
     "to": "sourcing",
     "status": "unread",
     "timestamp": "2026-03-14T00:00:00Z",
-    "message": "Urgent placement needed: RGN for nights at a 40-bed residential care home in Brighton BN1. 3-on-3-off pattern. PAYE £22/hr or umbrella £26/hr. Active NMC pin + 2yr post-reg experience required. No sponsorship. Start ASAP. Please source and screen suitable candidates."
+    "message": "New placement: Healthcare Assistant for domiciliary care provider in Eastbourne BN21. Full time Mon-Fri days, £13.50 PAYE. Valid driving licence and own car essential. 6 months UK care experience required. Enhanced DBS needed. Start within 2 weeks. No sponsorship. Please source and screen suitable candidates."
   },
   "job_brief": {
     "role": {
-      "title": "Registered General Nurse (RGN)",
+      "title": "Healthcare Assistant (HCA)",
       "type": "Temporary / Ongoing",
-      "shift_pattern": "Nights only — 3 on, 3 off",
-      "start_date": "ASAP"
+      "shift_pattern": "Full time — Monday to Friday, days",
+      "start_date": "Within 2 weeks"
     },
     "client": {
-      "setting": "40-bed residential care home",
+      "setting": "Domiciliary care provider",
       "location": {
-        "city": "Brighton",
-        "postcode_area": "BN1"
+        "city": "Eastbourne",
+        "postcode_area": "BN21"
       }
     },
     "pay": {
-      "paye": "£22.00 per hour",
-      "umbrella": "£26.00 per hour",
+      "paye": "£13.50 per hour",
+      "umbrella": "Not offered",
       "ltd_cis": "Not offered"
     },
     "essential_requirements": [
-      "Active, unrestricted NMC pin — must be verified prior to submission",
-      "Minimum 2 years post-registration experience",
+      "Minimum 6 months UK care experience (domiciliary or residential)",
+      "Valid full UK driving licence",
+      "Own vehicle — essential for community care runs",
       "Right to work in the UK — no sponsorship available",
-      "Availability for nights, 3-on-3-off pattern"
+      "Availability Monday to Friday, daytime hours"
     ],
     "desirable_criteria": [
-      "Local to Brighton / BN postcode area — client preference",
-      "Full UK driving licence and own vehicle"
+      "Experience in domiciliary / community care setting",
+      "Local to Eastbourne / BN postcode area"
     ],
     "screening": {
-      "red_flags": [
-        "Left previous role under disciplinary investigation or action — do not submit"
-      ],
+      "red_flags": [],
       "compliance_checks_required": [
-        "NMC pin active status confirmation",
+        "Enhanced DBS check (on update service preferred)",
         "Right to work documentation",
         "Two satisfactory professional references (most recent employer must be included)",
-        "DBS check (enhanced, on update service preferred)",
-        "Occupational health clearance"
+        "Driving licence verification",
+        "Proof of own vehicle and valid insurance for business use",
+        "Minimum 6 months UK care experience verified via reference or employment history"
       ]
     },
     "submission_instructions": {
-      "priority": "Urgent",
-      "notes": "Client prefers local candidates — flag distance from BN1 on any submission outside Brighton & Hove. Do not submit anyone with a disciplinary exit on record. Confirm NMC pin before first contact. Send candidate profiles back via Sourcing_to_Architect.json marked as unread."
+      "priority": "Urgent — 2-week start window",
+      "notes": "Driving licence and own car are non-negotiable — do not submit anyone without both. Confirm business use insurance cover at screening. No sponsorship under any circumstances. Send candidate profiles back via Sourcing_to_Architect.json marked as unread."
     }
   }
 }
