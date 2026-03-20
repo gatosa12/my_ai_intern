@@ -73,6 +73,9 @@ ELEVENLABS_AGENT_ID=your_agent_id
 # OpenAI GPT-4 (conversation AI)
 LLM_API_KEY=your_openai_key
 
+# Retell AI (voice agent - optional alternative to Twilio+ElevenLabs)
+RETELLAI_API_KEY=your_retellai_key
+
 # Bright Data (scraping - optional)
 BRIGHTDATA_API_TOKEN=your_token
 BRIGHTDATA_WEB_UNLOCKER_ZONE=your_zone
