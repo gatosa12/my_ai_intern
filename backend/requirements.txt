@@ -6,6 +6,6 @@ twilio
 dotenv
 openai
 python-dotenv
-retellai
+retell-sdk
 # Adding Bright Data MCP dependency
 nodejs
