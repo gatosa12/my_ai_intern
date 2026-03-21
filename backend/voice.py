@@ -2,6 +2,7 @@ import os
 import requests
 from twilio.rest import Client
 import openai
+from retell import Retell
 
 # ── ENV VARS ──────────────────────────────────────────────────────────────────
 twilio_sid        = os.getenv('TWILIO_ACCOUNT_SID')
@@ -10,6 +11,14 @@ twilio_number     = os.getenv('TWILIO_PHONE_NUMBER')
 elevenlabs_api_key   = os.getenv('ELEVENLABS_API_KEY')
 elevenlabs_agent_id  = os.getenv('ELEVENLABS_AGENT_ID')
 llm_api_key          = os.getenv('LLM_API_KEY')
+
+retellai_api_key      = os.getenv('RETELLAI_API_KEY')
+retellai_phone_number = os.getenv('RETELLAI_PHONE_NUMBER')
+AGENT_IDS = {
+    'sussex_staffing':  os.getenv('RETELLAI_SUSSEX_AGENT_ID'),
+    'roofing_outbound': os.getenv('RETELLAI_ROOFING_AGENT_ID'),
+    'roofing_inbound':  os.getenv('RETELLAI_ROOFING_AGENT_ID'),
+}
 
 # ── SYSTEM PROMPTS ────────────────────────────────────────────────────────────
 
@@ -178,7 +187,35 @@ def elevenlabs_tts(text):
     return None
 
 
-# ── CALL PLACER ───────────────────────────────────────────────────────────────
+# ── RETELL CALL PLACER ────────────────────────────────────────────────────────
+
+def retell_place_call(to_number, mode='sussex_staffing', dynamic_variables=None):
+    """
+    Place an outbound AI voice call via Retell AI.
+
+    mode: 'sussex_staffing' | 'roofing_outbound' | 'roofing_inbound'
+    dynamic_variables: dict of variables injected into the LLM prompt
+                       e.g. {'lead_name': 'John', 'company_name': 'ABC Roofing'}
+    Returns the Retell call_id.
+    """
+    agent_id = AGENT_IDS.get(mode)
+    if not agent_id:
+        raise ValueError(f"No Retell agent configured for mode '{mode}'")
+    if not retellai_phone_number:
+        raise ValueError("RETELLAI_PHONE_NUMBER not set")
+
+    client = Retell(api_key=retellai_api_key)
+    call = client.call.create_phone_call(
+        from_number=retellai_phone_number,
+        to_number=to_number,
+        override_agent_id=agent_id,
+        retell_llm_dynamic_variables=dynamic_variables or {},
+        metadata={'mode': mode},
+    )
+    return call.call_id
+
+
+# ── TWILIO/ELEVENLABS CALL PLACER (legacy) ────────────────────────────────────
 
 def place_call(to_number, script):
     """

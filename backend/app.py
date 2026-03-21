@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import get_db, init_db
 from scraper import scrape_real_estate_leads
-from voice import place_call, get_llm_response, build_opening_script
+from voice import place_call, retell_place_call, get_llm_response, build_opening_script
 from config import get_config, save_config
 
 app = Flask(__name__)
@@ -60,7 +60,7 @@ def scrape_new_leads():
     # Get location from request or use default
     location = request.json.get('location', 'Austin, TX')
     limit = request.json.get('limit', 30)
-        mode = request.json.get('mode', 'sussex_staffing')  # 'sussex_staffing' or 'roofing'
+    mode = request.json.get('mode', 'sussex_staffing')  # 'sussex_staffing' or 'roofing'
     
     # If missing keys, return dummy data (dummy handling is now in the scraper)
     scraped = scrape_real_estate_leads(location=location, limit=limit, mode=mode)
@@ -107,38 +107,100 @@ def get_call_logs(lead_id):
 def call_lead():
     data = request.json
     lead_id = data['lead_id']
-    script = data.get('script')
+    mode = data.get('mode', 'sussex_staffing')  # sussex_staffing | roofing_outbound | roofing_inbound
     config = get_config()
-    
-    # Get lead info to generate script if not provided
+
     with get_db() as conn:
         lead = conn.execute('SELECT * FROM leads WHERE id = ?', (lead_id,)).fetchone()
         if not lead:
             return {'error': 'Lead not found'}, 404
-        
-        # Generate script based on lead data if not provided
-        if not script:
-            agent_name = lead['name'].split()[0] if lead['name'] else "there"
-            buyer_count = lead.get('buyer_count', 0) or 10 # Fallback to 10 if not set
-            zip_code = extract_zip_from_address(lead['address']) or "your area"
-            script = f"Hi {agent_name}, this is Ava from Home IQ. We've tracked {buyer_count} qualified buyers searching in {zip_code} right now. Would you like a list?"
-    
-    # Dummy mode
-    if not config['TWILIO_ACCOUNT_SID'] or not config['ELEVENLABS_API_KEY'] or not config['LLM_API_KEY']:
+        lead = dict(lead)
+
+    # ── Retell AI (preferred) ──────────────────────────────────────────────────
+    if os.getenv('RETELLAI_API_KEY') and os.getenv('RETELLAI_PHONE_NUMBER'):
+        lead_name = lead['name'].split()[0] if lead.get('name') else 'there'
+        company_name = data.get('company_name', 'Sussex Staffing Solutions')
+        try:
+            call_id = retell_place_call(
+                to_number=lead['phone'],
+                mode=mode,
+                dynamic_variables={
+                    'lead_name': lead_name,
+                    'company_name': company_name,
+                    'lead_address': lead.get('address', ''),
+                    'lead_category': lead.get('category', ''),
+                },
+            )
+            with get_db() as conn:
+                conn.execute('UPDATE leads SET status = ? WHERE id = ?', ('Calling', lead_id))
+                conn.commit()
+            return {'call_id': call_id, 'provider': 'retell'}
+        except Exception as e:
+            return {'error': str(e)}, 500
+
+    # ── Legacy Twilio/ElevenLabs (fallback) ───────────────────────────────────
+    script = data.get('script')
+    if not script:
+        agent_name = lead['name'].split()[0] if lead.get('name') else 'there'
+        buyer_count = lead.get('buyer_count') or 10
+        zip_code = extract_zip_from_address(lead.get('address', '')) or 'your area'
+        script = (f"Hi {agent_name}, this is Ava from Home IQ. "
+                  f"We've tracked {buyer_count} qualified buyers searching in {zip_code} right now. "
+                  f"Would you like a list?")
+
+    if not config.get('TWILIO_ACCOUNT_SID') or not config.get('ELEVENLABS_API_KEY'):
         with get_db() as conn:
-            conn.execute('UPDATE leads SET status = ? WHERE id = ?', ("Calling", lead_id))
+            conn.execute('UPDATE leads SET status = ? WHERE id = ?', ('Calling', lead_id))
             conn.commit()
         return {'call_sid': 'dummy-call', 'dummy': True}
-    
-    # Real mode
+
     try:
         call_sid = place_call(lead['phone'], script)
         with get_db() as conn:
-            conn.execute('UPDATE leads SET status = ? WHERE id = ?', ("Calling", lead_id))
+            conn.execute('UPDATE leads SET status = ? WHERE id = ?', ('Calling', lead_id))
             conn.commit()
-        return {'call_sid': call_sid}
+        return {'call_sid': call_sid, 'provider': 'twilio'}
     except Exception as e:
         return {'error': str(e)}, 500
+
+
+@app.route('/api/retell-webhook', methods=['POST'])
+def retell_webhook():
+    """
+    Receive Retell AI call events: call_ended, call_analyzed.
+    Updates lead status and stores transcript + outcome in call_logs.
+    """
+    payload = request.json or {}
+    event = payload.get('event')
+    call_data = payload.get('data', {})
+    call_id = call_data.get('call_id', '')
+    metadata = call_data.get('metadata') or {}
+    transcript = call_data.get('transcript', '')
+
+    if event == 'call_ended':
+        # Mark any lead that was "Calling" for this call as Called
+        # (Retell doesn't send lead_id back — we store it via metadata if needed)
+        pass
+
+    elif event == 'call_analyzed':
+        analysis = call_data.get('call_analysis', {})
+        outcome = (analysis.get('custom_analysis_data') or {}).get('outcome', '')
+        callback_number = (analysis.get('custom_analysis_data') or {}).get('callback_number', '')
+        summary = analysis.get('call_summary', '')
+
+        # Look up lead by phone number if provided in metadata
+        lead_id = metadata.get('lead_id')
+        if lead_id:
+            with get_db() as conn:
+                new_status = 'Booked' if outcome == 'booked' else ('DNC' if outcome == 'dnc' else 'Called')
+                conn.execute('UPDATE leads SET status = ? WHERE id = ?', (new_status, lead_id))
+                conn.execute(
+                    'INSERT INTO call_logs (lead_id, call_status, transcript) VALUES (?, ?, ?)',
+                    (lead_id, outcome or 'completed', f"{summary}\n\n{transcript}".strip()),
+                )
+                conn.commit()
+
+    return {'status': 'ok'}
 
 def extract_zip_from_address(address):
     """Extract zip code from an address string"""
